@@ -23,6 +23,12 @@ Solve the board "epcepkxargbdyqarscimutbeo"
 
 	> node solver.js epcepkxargbdyqarscimutbeo
 	
+
+Solve the board "epcepkxargbdyqarscimutbeo" __without__ redis
+
+	> node plain.js epcepkxargbdyqarscimutbeo
+	
+
 Solve the board "epcepkxargbdyqarscimutbeo" and filtering the results with "pce"
 
 	> node solver.js xxiroarpiiuggozpdchzrazgj xir

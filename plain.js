@@ -33,6 +33,10 @@ var splitChars = function(str) {
 var wordInBoard = function(word, board) {
   if (!word) return false;
 
+  for (var i = 0; i < word.length; i++) {
+    if (board.indexOf(word.charAt(i)) == -1) return false;
+  };
+
   var boardChars = splitChars(board);
   var wordChars = splitChars(word);
 
