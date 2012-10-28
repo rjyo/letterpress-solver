@@ -4,14 +4,11 @@ var _ = require('underscore')
   , client = redis.createClient();
 
 var wordToKey = function(word) {
-  var key = word.split('');
-  key = key.sort(caseIsensitiveComp)
+  word = word.toLowerCase();
+  var key = splitChars(word);
+  key = key.sort()
   key = key.join('');
   return key;
-}
-
-var caseIsensitiveComp = function(strA, strB) {
-  return strA.toLowerCase().localeCompare(strB.toLowerCase());
 }
 
 var twoCharsKeys = function(str) {
@@ -26,11 +23,19 @@ var twoCharsKeys = function(str) {
   return keys;
 }
 
+var splitChars = function(str) {
+  var array = [];
+  for (var i = 0; i < str.length; i++) {
+    array.push(str.charAt(i));
+  }
+  return array;
+}
+
 var wordInBoard = function(word, board) {
   if (!word) return false;
 
-  var boardChars = board.split('');
-  var wordChars = word.split('');
+  var boardChars = splitChars(board);
+  var wordChars = splitChars(word);
 
   var found = false;
   for (var i = 0; i < wordChars.length; i++) {
@@ -53,8 +58,6 @@ var wordInBoard = function(word, board) {
 function solve(str, callback) {
   var key = wordToKey(str);
   var keys = twoCharsKeys(key);
-
-  // console.log(keys);
 
   client.sinter(keys, callback);
 }
@@ -116,7 +119,7 @@ if (args.length) {
     } else {
       var finished = 0;
 
-      console.log('Caculating results');
+      console.log('Solving board: ' + boardKey);
       console.log('--------------------');
       for (var i = 0; i < c.length; i++) {
         findWordIn(c[i], function(words) {
