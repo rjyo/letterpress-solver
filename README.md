@@ -13,16 +13,27 @@ Only tested on MacOSX 10.8
 	
 Install libs with `npm`
 
-	npm install
+	> npm install
 	
 Pre-process the data
 
-	node import.js
+	> node import.js
 	
 Solve the board "epcepkxargbdyqarscimutbeo"
 
-	node solver.js epcepkxargbdyqarscimutbeo
+	> node solver.js epcepkxargbdyqarscimutbeo
 	
 Solve the board "epcepkxargbdyqarscimutbeo" and filtering the results with "pce"
 
-	node solver.js epcepkxargbdyqarscimutbeo pce
+	> node solver.js xxiroarpiiuggozpdchzrazgj xir
+	Solving board: xxiroarpiiuggozpdchzrazgj
+	--------------------
+	airprox
+	apraxic
+	corixid
+	doxographic
+	ixora
+	orixa
+	radix
+	--------------------
+	Time Spent: 0.185s
