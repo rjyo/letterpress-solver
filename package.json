@@ -1,0 +1,13 @@
+{
+  "name": "letterpress-solver",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "underscore": "*",
+    "hiredis": "*",
+    "redis": "*"
+  }
+}

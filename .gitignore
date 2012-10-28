@@ -1,0 +1,13 @@
+.DS_Store
+pids
+logs
+nohup.out
+dump
+.sass-cache
+node_modules
+*.pem
+lib-cov
+tmp
+dist
+cache
+config.js
