@@ -96,7 +96,6 @@ var results = [];
 rl.setPrompt('lp% ');
 rl.prompt();
 
-var inputPrime, result;
 rl.on('line', function(line) {
   line = line.trim();
   if (line.substr(0, 1) === '/') {
@@ -108,8 +107,9 @@ rl.on('line', function(line) {
       }
     };
 
+    console.log('Filtering first 30 words, ' + filtered.length + ' results');
+    console.log('--------------------');
     printResults(filtered, 30);
-    console.log('Filtered first 30 in ' + filtered.length + ' results');
   } else {
     var startTime = new Date();
 
@@ -121,10 +121,9 @@ rl.on('line', function(line) {
     var endTime = new Date();
     var time = (endTime - startTime)/1000;
 
-    printResults(results, 30);
-
-    console.log('--------------------');
     console.log('Found ' + results.length + ' results, time spent: ' + time + 's');
+    console.log('--------------------');
+    printResults(results, 30);
   }
   rl.prompt();
 }).on('close', function() {
