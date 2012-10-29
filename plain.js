@@ -113,7 +113,7 @@ rl.on('line', function(line) {
     console.log('Filtered ' + filtered.length + ' results');
     console.log('--------------------');
     printResults(filtered);
-  } else {
+  } else if (line.length) {
     var startTime = new Date();
 
     results = solveBoard(line);

@@ -26,27 +26,25 @@ Solve the board "epcepkxargbdyqarscimutbeo"
 
 Solve the board "epcepkxargbdyqarscimutbeo" __without__ redis. This is an interactive CLI, enter the board to solve and use `'/'` to filter.
 
-    ± % node plain.js
-    System Ready!
-    lp% bxuwhckkvkzjphnozatpunexs
-    watchboxes
-    nonsubject
-    nuncupates
-    outpunches
-    buckwheats
-    phosphate
-    nanotechs
-    nanotubes
-    naphthous
-    ...
-    --------------------
-    Found 3360 results, time spent: 0.019s
-    lp% /pun
-    nuncupates
-    outpunches
-    naphthous
-    nuncupate
-    unweapons
-    puncheons
-    putcheons
-    lp% 
+	> node plain.js
+	System Ready!
+	lp% xxiroarpiiuggozpdchzrazgj
+	Found 896 results, time spent: 0.01s
+	--------------------
+	radiographic        doxographic         idiographic         cardiograph         radiograph          
+	zoographic          diagraphic          ophidiaria          audiograph          urographic          
+	orographic          cardophagi          xiphopagic          idiograph           ophiuroid           
+	rhizocarp           digraphic           jaghirdar           arcograph           xiphopagi           
+	paragogic           apagogic            paradrop            pauropod            chiragra            
+	aciduria            urochord            ophiurid            podagric            podocarp            
+	odograph            chorioid            churidar            approach            apograph            
+	...
+
+	lp% /goo
+	Filtered 21 results
+	--------------------
+	doxographic         zoographic          orographic          odograph            coraggio            
+	groupoid            porrigo             hopdog              gorgio              droog               
+	gazoo               cohog               doggo               agood               gogo                
+	good                goog                goop                goor                pogo                
+	goo                 
