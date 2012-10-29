@@ -1,6 +1,6 @@
 ### the Letterpress Game Solver
 
-This is a cli tool to solve the [Lettpress](http://www.atebits.com/letterpress/) game by Loren Brichter. This solver used a Redis database to preprocess data and store results
+This is a cli tool to solve the [Letterpress](http://www.atebits.com/letterpress/) game by Loren Brichter. This solver used a Redis database to preprocess data and store results
 
 ### Requirements
 
@@ -24,22 +24,29 @@ Solve the board "epcepkxargbdyqarscimutbeo"
 	> node solver.js epcepkxargbdyqarscimutbeo
 	
 
-Solve the board "epcepkxargbdyqarscimutbeo" __without__ redis
+Solve the board "epcepkxargbdyqarscimutbeo" __without__ redis. This is an interactive CLI, enter the board to solve and use `'/'` to filter.
 
-	> node plain.js epcepkxargbdyqarscimutbeo
-	
-
-Solve the board "epcepkxargbdyqarscimutbeo" and filtering the results with "pce"
-
-	> node solver.js xxiroarpiiuggozpdchzrazgj xir
-	Solving board: xxiroarpiiuggozpdchzrazgj
-	--------------------
-	airprox
-	apraxic
-	corixid
-	doxographic
-	ixora
-	orixa
-	radix
-	--------------------
-	Time Spent: 0.185s
+    ± % node plain.js
+    System Ready!
+    lp% bxuwhckkvkzjphnozatpunexs
+    watchboxes
+    nonsubject
+    nuncupates
+    outpunches
+    buckwheats
+    phosphate
+    nanotechs
+    nanotubes
+    naphthous
+    ...
+    --------------------
+    Found 3360 results, time spent: 0.019s
+    lp% /pun
+    nuncupates
+    outpunches
+    naphthous
+    nuncupate
+    unweapons
+    puncheons
+    putcheons
+    lp% 

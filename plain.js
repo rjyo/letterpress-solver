@@ -8,7 +8,8 @@ var importContent = function(content) {
   var last = 0;
   while (index > -1) {
     var line = content.substring(last, index);
-    wordList.push(line);
+    wordVal = valueForWord(line);
+    wordList.push([line, wordVal]);
     last = index + 1;
     index = content.indexOf('\n', last);
   }
@@ -20,7 +21,7 @@ var importDir = function(dirName) {
     var content = fs.readFileSync(dirName + '/' + file, 'utf-8');
     importContent(content);
   });
-}
+};
 
 var splitChars = function(str) {
   var array = [];
@@ -28,25 +29,34 @@ var splitChars = function(str) {
     array.push(str.charAt(i));
   }
   return array;
-}
+};
 
-var wordInBoard = function(word, board) {
+var valueForWord = function(word) {
+  var result = 0;
+  for (var i = 0; i < word.length; i++) {
+    var bit = word.charCodeAt(i) - 97;
+    result = result | (1 << bit);
+  }
+  return result;
+};
+
+var wordInStr = function(word, wordVal, str, strVal) {
   if (!word) return false;
 
-  for (var i = 0; i < word.length; i++) {
-    if (board.indexOf(word.charAt(i)) == -1) return false;
-  };
+  // var wordVal = valueForWord(word);
+  if ((wordVal & strVal) != wordVal) return false;
 
-  var boardChars = splitChars(board);
+  // detailed check
+  var strChars = splitChars(str);
   var wordChars = splitChars(word);
 
   var found = false;
   for (var i = 0; i < wordChars.length; i++) {
     found = false;
-    for (var j = 0; j < boardChars.length; j++) {
-      if (boardChars[j] == wordChars[i]) {
+    for (var j = 0; j < strChars.length; j++) {
+      if (strChars[j] == wordChars[i]) {
         found = true;
-        boardChars[j] = '';
+        strChars[j] = '';
         break;
       }
     }
@@ -58,32 +68,66 @@ var wordInBoard = function(word, board) {
   return true;
 }
 
-var args = process.argv.slice(2);
-if (args.length) {
+importDir('./words');
+console.log('System Ready!');
 
-  var startTime = new Date();
-  var board = args[0];
-  var wantToUseWords = args[1];
-
-  importDir('./words');
-
-  var startTime = new Date();
-  var results = [];
+var solveBoard = function(board) {
+  var boardVal = valueForWord(board); var results = [];
   for (var i = 0; i < wordList.length; i++) {
-    if (wordInBoard(wordList[i], board)) {
-      if (!wantToUseWords || wordInBoard(wantToUseWords, wordList[i])) {
-        results.push(wordList[i]);
-      }
+    if (wordInStr(wordList[i][0], wordList[i][1], board, boardVal)) {
+      results.push(wordList[i]);
     }
   };
-  var endTime = new Date();
-  var time = (endTime - startTime)/1000;
 
-  console.log('Solving board: ' + board);
-  console.log('--------------------');
-  _.each(results, function(result) {
-    console.log(result);
-  });
-  console.log('--------------------');
-  console.log('Time Spent: ' + time + 's');
-}
+  return results;
+};
+
+var printResults = function(r, limit) {
+  for (var i = 0; i < r.length && i < limit; i++) {
+    console.log(r[i][0]);
+  }
+};
+
+var readline = require('readline')
+  , rl = readline.createInterface(process.stdin, process.stdout);
+
+var results = [];
+
+rl.setPrompt('lp% ');
+rl.prompt();
+
+var inputPrime, result;
+rl.on('line', function(line) {
+  line = line.trim();
+  if (line.substr(0, 1) === '/') {
+    line = line.substring(1);
+    var filtered = [];
+    for (var i = 0; i < results.length; i++) {
+      if (wordInStr(line, valueForWord(line), results[i][0], results[i][1])) {
+        filtered.push(results[i]);
+      }
+    };
+
+    printResults(filtered, 30);
+    console.log('Filtered first 30 in ' + filtered.length + ' results');
+  } else {
+    var startTime = new Date();
+
+    results = solveBoard(line);
+    results = results.sort(function(a, b) {
+      return b[0].length - a[0].length;
+    });
+
+    var endTime = new Date();
+    var time = (endTime - startTime)/1000;
+
+    printResults(results, 30);
+
+    console.log('--------------------');
+    console.log('Found ' + results.length + ' results, time spent: ' + time + 's');
+  }
+  rl.prompt();
+}).on('close', function() {
+  console.log('Have a great day!');
+  process.exit(0);
+});
