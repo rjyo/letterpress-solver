@@ -82,10 +82,13 @@ var solveBoard = function(board) {
   return results;
 };
 
-var printResults = function(r, limit) {
-  for (var i = 0; i < r.length && i < limit; i++) {
-    console.log(r[i][0]);
+var printResults = function(r) {
+  var formattedResult = '';
+  for (var i = 0; i < r.length; i++) {
+    formattedResult += (r[i][0] + '                    ').substring(0, 20);
+    if ((i + 1) % 5 == 0) formattedResult += '\n';
   }
+  console.log(formattedResult);
 };
 
 var readline = require('readline')
@@ -107,9 +110,9 @@ rl.on('line', function(line) {
       }
     };
 
-    console.log('Filtering first 30 words, ' + filtered.length + ' results');
+    console.log('Filtered ' + filtered.length + ' results');
     console.log('--------------------');
-    printResults(filtered, 30);
+    printResults(filtered);
   } else {
     var startTime = new Date();
 
@@ -127,6 +130,5 @@ rl.on('line', function(line) {
   }
   rl.prompt();
 }).on('close', function() {
-  console.log('Have a great day!');
   process.exit(0);
 });
