@@ -23,58 +23,50 @@ var importDir = function(dirName) {
   });
 };
 
-var splitChars = function(str) {
-  var array = [];
-  for (var i = 0; i < str.length; i++) array.push(str.charAt(i));
-  return array;
-};
-
 var indexOfString = function(word) {
   var result = 0;
+
+  var detailBits = [];
+  for (var i = 0; i < 26; i++) detailBits[i] = 0;
+
   for (var i = 0; i < word.length; i++) {
     var bit = word.charCodeAt(i) - 97;
+
+    detailBits[bit]++;
     result = result | (1 << bit);
   }
-  return result;
+  return [result, detailBits];
 };
 
 var isWordInString = function(word, wordVal, str, strVal) {
-  if ((wordVal & strVal) != wordVal) return false;
+  if ((wordVal[0] & strVal[0]) != wordVal[0]) return false;
 
   // detailed check
-  var strChars = splitChars(str);
-  var wordChars = splitChars(word);
-
-  var found = false;
-  for (var i = 0; i < wordChars.length; i++) {
-    found = false;
-    for (var j = 0; j < strChars.length; j++) {
-      if (strChars[j] == wordChars[i]) {
-        found = true;
-        strChars[j] = '';
-        break;
-      }
-    }
-    if (!found) {
-      return false;
-    }
+  for (var i = 0; i < word.length; i++) {
+    var bit = word.charCodeAt(i) - 97;
+    if (strVal[1][bit] < wordVal[1][bit]) return false;
   }
 
   return true;
 }
 
 var solveBoard = function(board) {
-  var boardVal = indexOfString(board); var results = [];
+  var boardVal = indexOfString(board);
+  var r = [];
   for (var i = 0; i < wordList.length; i++) {
     if (isWordInString(wordList[i][0], wordList[i][1], board, boardVal)) {
-      results.push(wordList[i]);
+      r.push(wordList[i]);
     }
   };
 
-  return results;
+  return r;
 };
 
 var printResults = function(r) {
+  if (r.length > 1000) {
+    return console.log("More than 1000 results. Try filtering with '/'");
+  }
+
   var formattedResult = '';
   for (var i = 0; i < r.length; i++) {
     formattedResult += (r[i][0] + '                    ').substring(0, 20);
@@ -107,6 +99,21 @@ rl.on('line', function(line) {
     printResults(filtered);
     console.log('--------------------');
     console.log('Filtered ' + filtered.length + ' results');
+  } else if (line.substring(0, 1) === 't') {
+    line = line.substring(2);
+    var inputs = line.split(' ');
+    if (inputs.length == 1) {
+      var i = indexOfString(inputs[0]);
+      console.log('index: ' + i[0] + ', bits:' + i[1]);
+    } else {
+      var i = new Array(inputs.length);
+      i[0] = indexOfString(inputs[0]);
+      i[1] = indexOfString(inputs[1]);
+      console.log('index: ' + i[0][0] + ', bits:' + i[0][1]);
+      console.log('index: ' + i[1][0] + ', bits:' + i[1][1]);
+      var test = isWordInString(inputs[0], i[0], inputs[1], i[1]);
+      console.log('result: ' + test);
+    }
   } else if (line.length) {
     var startTime = new Date();
 
