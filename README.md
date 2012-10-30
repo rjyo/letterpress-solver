@@ -1,16 +1,18 @@
-### the Letterpress Game Solver
+## the Letterpress Game Solver
 
-This is a cli tool to solve the [Letterpress](http://www.atebits.com/letterpress/) game by Loren Brichter. This solver used a Redis database to preprocess data and store results
+A CLI tool to solve the [Letterpress](http://www.atebits.com/letterpress/) game by Loren Brichter. This solver used a Redis database to preprocess data and store results. A plain version to solve the board __without__ redis is also included.
 
-### Requirements
+## Requirements
 
 1. node (`brew install node`)
-2. redis (`brew install redis`)
+2. redis (`brew install redis`, only needed for solver.js)
 
 Only tested on MacOSX 10.8 
 
-### Usage
+## Usage
 	
+### The Redis Version
+
 Install libs with `npm`
 
 	> npm install
@@ -22,15 +24,18 @@ Pre-process the data
 Solve the board "epcepkxargbdyqarscimutbeo"
 
 	> node solver.js epcepkxargbdyqarscimutbeo
-	
 
-Solve the board "epcepkxargbdyqarscimutbeo" __without__ redis. This is an interactive CLI, enter the board to solve and use `'/'` to filter.
+Solve the board "epcepkxargbdyqarscimutbeo" and filter the results with "epc"
+
+	> node solver.js epcepkxargbdyqarscimutbeo	epc
+
+### The Plain Version
+
+A plain version to solve the board __without__ redis is also included. This is an interactive CLI, enter the board to solve and use `'/'` to filter the results.
 
 	> node plain.js
 	System Ready!
 	lp% xxiroarpiiuggozpdchzrazgj
-	Found 896 results, time spent: 0.01s
-	--------------------
 	radiographic        doxographic         idiographic         cardiograph         radiograph          
 	zoographic          diagraphic          ophidiaria          audiograph          urographic          
 	orographic          cardophagi          xiphopagic          idiograph           ophiuroid           
@@ -39,12 +44,14 @@ Solve the board "epcepkxargbdyqarscimutbeo" __without__ redis. This is an intera
 	aciduria            urochord            ophiurid            podagric            podocarp            
 	odograph            chorioid            churidar            approach            apograph            
 	...
+	--------------------
+	Found 896 results, time spent: 0.01s
 
 	lp% /goo
-	Filtered 21 results
-	--------------------
 	doxographic         zoographic          orographic          odograph            coraggio            
 	groupoid            porrigo             hopdog              gorgio              droog               
 	gazoo               cohog               doggo               agood               gogo                
 	good                goog                goop                goor                pogo                
 	goo                 
+	--------------------
+	Filtered 21 results

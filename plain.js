@@ -110,9 +110,9 @@ rl.on('line', function(line) {
       }
     };
 
-    console.log('Filtered ' + filtered.length + ' results');
-    console.log('--------------------');
     printResults(filtered);
+    console.log('--------------------');
+    console.log('Filtered ' + filtered.length + ' results');
   } else if (line.length) {
     var startTime = new Date();
 
@@ -124,9 +124,9 @@ rl.on('line', function(line) {
     var endTime = new Date();
     var time = (endTime - startTime)/1000;
 
-    console.log('Found ' + results.length + ' results, time spent: ' + time + 's');
+    printResults(results);
     console.log('--------------------');
-    printResults(results, 30);
+    console.log('Found ' + results.length + ' results, time spent: ' + time + 's');
   }
   rl.prompt();
 }).on('close', function() {
