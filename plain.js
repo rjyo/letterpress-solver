@@ -8,8 +8,8 @@ var importContent = function(content) {
   var last = 0;
   while (index > -1) {
     var line = content.substring(last, index);
-    wordVal = valueForWord(line);
-    wordList.push([line, wordVal]);
+    strIndex = indexOfString(line);
+    wordList.push([line, strIndex]);
     last = index + 1;
     index = content.indexOf('\n', last);
   }
@@ -25,13 +25,11 @@ var importDir = function(dirName) {
 
 var splitChars = function(str) {
   var array = [];
-  for (var i = 0; i < str.length; i++) {
-    array.push(str.charAt(i));
-  }
+  for (var i = 0; i < str.length; i++) array.push(str.charAt(i));
   return array;
 };
 
-var valueForWord = function(word) {
+var indexOfString = function(word) {
   var result = 0;
   for (var i = 0; i < word.length; i++) {
     var bit = word.charCodeAt(i) - 97;
@@ -40,10 +38,7 @@ var valueForWord = function(word) {
   return result;
 };
 
-var wordInStr = function(word, wordVal, str, strVal) {
-  if (!word) return false;
-
-  // var wordVal = valueForWord(word);
+var isWordInString = function(word, wordVal, str, strVal) {
   if ((wordVal & strVal) != wordVal) return false;
 
   // detailed check
@@ -68,13 +63,10 @@ var wordInStr = function(word, wordVal, str, strVal) {
   return true;
 }
 
-importDir('./words');
-console.log('System Ready!');
-
 var solveBoard = function(board) {
-  var boardVal = valueForWord(board); var results = [];
+  var boardVal = indexOfString(board); var results = [];
   for (var i = 0; i < wordList.length; i++) {
-    if (wordInStr(wordList[i][0], wordList[i][1], board, boardVal)) {
+    if (isWordInString(wordList[i][0], wordList[i][1], board, boardVal)) {
       results.push(wordList[i]);
     }
   };
@@ -91,10 +83,12 @@ var printResults = function(r) {
   console.log(formattedResult);
 };
 
-var readline = require('readline')
-  , rl = readline.createInterface(process.stdin, process.stdout);
+importDir('./words');
+console.log('System Ready!');
 
-var results = [];
+var readline = require('readline')
+  , rl = readline.createInterface(process.stdin, process.stdout)
+  , results = [];
 
 rl.setPrompt('lp% ');
 rl.prompt();
@@ -105,7 +99,7 @@ rl.on('line', function(line) {
     line = line.substring(1);
     var filtered = [];
     for (var i = 0; i < results.length; i++) {
-      if (wordInStr(line, valueForWord(line), results[i][0], results[i][1])) {
+      if (isWordInString(line, indexOfString(line), results[i][0], results[i][1])) {
         filtered.push(results[i]);
       }
     };
