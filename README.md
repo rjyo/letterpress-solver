@@ -35,7 +35,7 @@ A plain version to solve the board __without__ redis is also included. This is a
 
 	> node plain.js
 	System Ready!
-	lp% xxiroarpiiuggozpdchzrazgj
+	% xxiroarpiiuggozpdchzrazgj
 	radiographic        doxographic         idiographic         cardiograph         radiograph          
 	zoographic          diagraphic          ophidiaria          audiograph          urographic          
 	orographic          cardophagi          xiphopagic          idiograph           ophiuroid           
@@ -47,7 +47,7 @@ A plain version to solve the board __without__ redis is also included. This is a
 	--------------------
 	Found 896 results, time spent: 0.01s
 
-	lp% /goo
+	% /goo
 	doxographic         zoographic          orographic          odograph            coraggio            
 	groupoid            porrigo             hopdog              gorgio              droog               
 	gazoo               cohog               doggo               agood               gogo                
