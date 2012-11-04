@@ -8,6 +8,7 @@
   "dependencies": {
     "underscore": "*",
     "hiredis": "*",
-    "redis": "*"
+    "redis": "*",
+    "should": "*"
   }
 }
