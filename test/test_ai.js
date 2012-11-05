@@ -138,7 +138,7 @@ describe('Basic Logic Operations', function() {
       wordPos = ai.wordPosition(word, boardPos);
       wordPos.length.should.eql(3);
 
-      word = "xxrrraayy" // c(2,2) x c(3,3) x c(2,2) x c(2,2);
+      word = "xxrrraayy" // c(2,2) x c(3,3) x c(2,1) x c(2,2);
       wordPos = ai.wordPosition(word, boardPos);
       wordPos.length.should.eql(1);
     });
@@ -242,7 +242,7 @@ describe('Board Operations', function() {
     });
 
     it('make deep blue', function() {
-      var board = [-1,-1,0,0,0,
+      var board = [0,-1,0,0,0,
                    -1,0,0,0,0,
                    0,0,0,0,0,
                    0,0,0,0,0,
@@ -266,7 +266,7 @@ describe('Board Operations', function() {
     });
 
     it('they play', function() {
-      var board = [-1,-1,0,0,0,
+      var board = [-2,-1,0,0,0,
                    -1,0,0,0,0,
                    0,0,0,0,0,
                    0,0,0,0,0,
@@ -288,5 +288,27 @@ describe('Board Operations', function() {
 
       result.should.eql(expected);
     });
+  });
+
+  describe('#evaluateBoard()', function() {
+    it('red', function() {
+      var board = [-2,-1,0,0,0,
+                   -1,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,1];
+      var score = ai.evaluateBoard(board);
+      score.should.eql(-3);
+    })
+
+    it('ending', function() {
+      var board = [-2,-2,-1,1,2,
+                   -2,-2,-1,1,1,
+                   -2,-2,1,1,1,
+                   -2,-2,1,1,1,
+                   -2,-2,1,1,1];
+      var score = ai.evaluateBoard(board);
+      score.should.eql(DEF.PLUS_INFINITE);
+    })
   });
 });
