@@ -49,7 +49,15 @@ describe('Array Operations', function() {
     it('should eql', function() {
       var a1 = [1,2];
       var a2 = ai.arrayExpand(a1);
-      [0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].should.eql(a2);
+      a2.should.eql([0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+    });
+  });
+
+  describe('#arrayWithoutDup()', function() {
+    it('should eql', function() {
+      var a1 = [[1,2], [1,2], [2,1]];
+      var a2 = ai.arrayWithoutDup(a1);
+      a2.should.eql([[1,2]]);
     });
   });
 });
@@ -81,17 +89,6 @@ describe('Basic Logic Operations', function() {
       wordPos.should.eql(expectedResult);
     });
 
-    it('check result same letters', function() {
-      var board = "aac"
-      var result = ai.boardPosition(board);
-      var wordPos = ai.wordPosition("aa", result);
-
-      var expectedResult = [];
-      expectedResult.push([0,1]);
-
-      wordPos.should.eql(expectedResult);
-    });
-
     it('check results length', function() {
       var board = "abacddkc";
       var word = "ab";
@@ -101,6 +98,10 @@ describe('Basic Logic Operations', function() {
       boardPos = ai.boardPosition(board);
       wordPos = ai.wordPosition(word, boardPos);
       wordPos.length.should.eql(2);
+
+      word = "aa";
+      wordPos = ai.wordPosition(word, boardPos);
+      wordPos.length.should.eql(1);
 
       word = "abc";
       wordPos = ai.wordPosition(word, boardPos);
@@ -113,13 +114,13 @@ describe('Basic Logic Operations', function() {
 
     it('real world example', function() {
       var board = "bedrmnkcyaejdrxyxuntcalkr";
-      var word = "xray";
+      var word = "xrayy";
       var boardPos;
       var wordPos;
 
       boardPos = ai.boardPosition(board);
       wordPos = ai.wordPosition(word, boardPos);
-      wordPos.length.should.eql(24);
+      wordPos.length.should.eql(12);
     });
   });
 
@@ -196,7 +197,7 @@ describe('Basic Logic Operations', function() {
 
 describe('Board Operations', function() {
   describe('#applyMove()', function() {
-    it('should eql', function() {
+    it('remove deep red', function() {
       var board = [-2,-1,0,0,0,
                    -1,0,0,0,0,
                    0,0,0,0,0,
@@ -220,7 +221,7 @@ describe('Board Operations', function() {
       result.should.eql(expected);
     });
 
-    it('should eql 2', function() {
+    it('make deep blue', function() {
       var board = [-1,-1,0,0,0,
                    -1,0,0,0,0,
                    0,0,0,0,0,
@@ -237,6 +238,30 @@ describe('Board Operations', function() {
 
       var expected = [2,1,1,0,0,
                       1,0,0,0,0,
+                      0,0,0,0,0,
+                      0,0,0,0,0,
+                      0,0,0,0,1];
+
+      result.should.eql(expected);
+    });
+
+    it('they play', function() {
+      var board = [-1,-1,0,0,0,
+                   -1,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,1];
+
+      var  word = [-1,-1,-1,0,0,
+                   0,-1,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0];
+
+      var result = ai.applyMove(board, word);
+
+      var expected = [-2,-2,-1,0,0,
+                      -1,-1,0,0,0,
                       0,0,0,0,0,
                       0,0,0,0,0,
                       0,0,0,0,1];
