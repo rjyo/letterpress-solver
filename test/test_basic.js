@@ -94,7 +94,7 @@ describe('Basic Logic Operations', function() {
                       0,0,0,0,0,
                       0,0,0,0,0];
       var weight = ai.weightBoard(board);
-      expected = ai.arrayAdd(expected, DEF.WEIGHT_BORDER);
+      expected = expected.add(DEF.WEIGHT_BORDER);
       weight.should.eql(expected);
     });
 
@@ -106,7 +106,7 @@ describe('Basic Logic Operations', function() {
                       0,0,0,0,0,
                       0,0,0,0,0];
       var weight = ai.weightBoard(board);
-      expected = ai.arrayAdd(expected, DEF.WEIGHT_BORDER);
+      expected = expected.add(DEF.WEIGHT_BORDER);
       weight.should.eql(expected);
     });
 
@@ -118,7 +118,7 @@ describe('Basic Logic Operations', function() {
                       0, 0, 0, 0, DEF.WEIGHT_NEAR_VOWEL,
                       0, 0, 0, DEF.WEIGHT_NEAR_VOWEL,DEF.WEIGHT_VOWEL];
       var weight = ai.weightBoard(board);
-      expected = ai.arrayAdd(expected, DEF.WEIGHT_BORDER);
+      expected = expected.add(DEF.WEIGHT_BORDER);
       weight.should.eql(expected);
     });
   });
@@ -136,10 +136,10 @@ describe('Basic Logic Operations', function() {
       for (var i = 0; i < words.length; i++) {
         var wordPos = ai.wordPosition(words[i], boardPos);
         for (var j = 0; j < wordPos.length; j++) {
-          var expanedPos = ai.arrayExpand(wordPos[j]);
-          var posWeight = ai.arrayMul(expanedPos, weight);
+          var expanedPos = wordPos[j].expand();
+          var posWeight = expanedPos.multiply(weight);
 
-          posWeight = ai.arraySum(posWeight);
+          posWeight = posWeight.sum();
           if (posWeight > bestWeight) {
             bestWeight = posWeight;
             bestWord = words[i];
