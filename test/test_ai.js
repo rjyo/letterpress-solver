@@ -114,13 +114,33 @@ describe('Basic Logic Operations', function() {
 
     it('real world example', function() {
       var board = "bedrmnkcyaejdrxyxuntcalkr";
-      var word = "xrayy";
+      var word = "xray" // c(2,1) x c(3,1) x c(2,1) x c(2,1);
       var boardPos;
       var wordPos;
 
       boardPos = ai.boardPosition(board);
       wordPos = ai.wordPosition(word, boardPos);
+      wordPos.length.should.eql(24);
+
+      word = "xrayy"; // c(2,1) x c(3,2) x c(2,1) x c(2,2)
+      wordPos = ai.wordPosition(word, boardPos);
       wordPos.length.should.eql(12);
+
+      word = "xxrayy"; // c(2,2) x c(3,1) x c(2,1) x c(2,2)
+      wordPos = ai.wordPosition(word, boardPos);
+      wordPos.length.should.eql(6);
+
+      word = "xxrrayy"; // c(2,2) x c(3,2) x c(2,1) x c(2,2)
+      wordPos = ai.wordPosition(word, boardPos);
+      wordPos.length.should.eql(6);
+
+      word = "xxrraayy" // c(2,2) x c(3,2) x c(2,2) x c(2,2);
+      wordPos = ai.wordPosition(word, boardPos);
+      wordPos.length.should.eql(3);
+
+      word = "xxrrraayy" // c(2,2) x c(3,3) x c(2,2) x c(2,2);
+      wordPos = ai.wordPosition(word, boardPos);
+      wordPos.length.should.eql(1);
     });
   });
 
