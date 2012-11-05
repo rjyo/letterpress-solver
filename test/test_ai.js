@@ -1,13 +1,6 @@
-var WEIGHT_VOWEL = 5;
-var WEIGHT_NEAR_VOWEL = 5;
-var WEIGHT_BORDER = [3,2,1,2,3,
-                     2,2,0,2,2,
-                     1,0,0,0,1,
-                     2,2,0,2,2,
-                     3,2,1,2,3];
-
 var should = require("should")
   , ai = require("../lib/ai")
+  , DEF = require('../lib/define')
 
 describe('Array Operations', function() {
   describe('#arrayAdd()', function() {
@@ -23,7 +16,17 @@ describe('Array Operations', function() {
 
       var a3 = ai.arrayAdd(a1, a2);
       a3.should.eql([1,3,2]);
-    })
+    });
+  });
+
+  describe('#arraySub()', function() {
+    it('should eql', function() {
+      var a1 = [1,2,3];
+      var a2 = [0,1,-1];
+
+      var a3 = ai.arraySub(a1, a2);
+      a3.should.eql([1,1,4]);
+    });
   });
 
   describe('#arrayMul()', function() {
@@ -39,7 +42,7 @@ describe('Array Operations', function() {
 
       var a3 = ai.arrayMul(a1, a2);
       a3.should.eql([16,2,-3]);
-    })
+    });
   });
 
   describe('#arrayExpand()', function() {
@@ -47,11 +50,11 @@ describe('Array Operations', function() {
       var a1 = [1,2];
       var a2 = ai.arrayExpand(a1);
       [0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].should.eql(a2);
-    })
+    });
   });
-})
+});
 
-describe('Basic AI Operations', function() {
+describe('Basic Logic Operations', function() {
   describe('#boardPosition()', function() {
     it('should eql', function() {
       var board = "aaaac"
@@ -62,7 +65,7 @@ describe('Basic AI Operations', function() {
       boardPos[2] = [4];
 
       result.should.eql(boardPos);
-    })
+    });
   });
 
   describe('#wordPosition()', function() {
@@ -74,6 +77,17 @@ describe('Basic AI Operations', function() {
       var expectedResult = [];
       expectedResult.push([0,2]);
       expectedResult.push([1,2]);
+
+      wordPos.should.eql(expectedResult);
+    });
+
+    it('check result same letters', function() {
+      var board = "aac"
+      var result = ai.boardPosition(board);
+      var wordPos = ai.wordPosition("aa", result);
+
+      var expectedResult = [];
+      expectedResult.push([0,1]);
 
       wordPos.should.eql(expectedResult);
     });
@@ -95,7 +109,7 @@ describe('Basic AI Operations', function() {
       word = "acdk";
       wordPos = ai.wordPosition(word, boardPos);
       wordPos.length.should.eql(8);
-    })
+    });
 
     it('real world example', function() {
       var board = "bedrmnkcyaejdrxyxuntcalkr";
@@ -106,44 +120,44 @@ describe('Basic AI Operations', function() {
       boardPos = ai.boardPosition(board);
       wordPos = ai.wordPosition(word, boardPos);
       wordPos.length.should.eql(24);
-    })
+    });
   });
 
   describe('#weightBoard()', function() {
 
     it('one vowel in the middle', function() {
       var board='bbbbb' + 'babbb' + 'bbbbb' + 'bbbbb' + 'bbbbb';
-      var expected = [0,WEIGHT_NEAR_VOWEL,0,0,0,
-                      WEIGHT_NEAR_VOWEL,WEIGHT_VOWEL,WEIGHT_NEAR_VOWEL,0,0,
-                      0,WEIGHT_NEAR_VOWEL,0,0,0,
+      var expected = [0,DEF.WEIGHT_NEAR_VOWEL,0,0,0,
+                      DEF.WEIGHT_NEAR_VOWEL,DEF.WEIGHT_VOWEL,DEF.WEIGHT_NEAR_VOWEL,0,0,
+                      0,DEF.WEIGHT_NEAR_VOWEL,0,0,0,
                       0,0,0,0,0,
                       0,0,0,0,0];
       var weight = ai.weightBoard(board);
-      expected = ai.arrayAdd(expected, WEIGHT_BORDER);
+      expected = ai.arrayAdd(expected, DEF.WEIGHT_BORDER);
       weight.should.eql(expected);
     });
 
     it('one vowel on border', function() {
       var board='bbbbb' + 'abbbb' + 'bbbbb' + 'bbbbb' + 'bbbbb';
-      var expected = [WEIGHT_NEAR_VOWEL,0,0,0,0,
-                      WEIGHT_VOWEL,WEIGHT_NEAR_VOWEL,0,0,0,
-                      WEIGHT_NEAR_VOWEL,0,0,0,0,
+      var expected = [DEF.WEIGHT_NEAR_VOWEL,0,0,0,0,
+                      DEF.WEIGHT_VOWEL,DEF.WEIGHT_NEAR_VOWEL,0,0,0,
+                      DEF.WEIGHT_NEAR_VOWEL,0,0,0,0,
                       0,0,0,0,0,
                       0,0,0,0,0];
       var weight = ai.weightBoard(board);
-      expected = ai.arrayAdd(expected, WEIGHT_BORDER);
+      expected = ai.arrayAdd(expected, DEF.WEIGHT_BORDER);
       weight.should.eql(expected);
     });
 
     it('3 vowels', function() {
       var board='bbbbb' + 'aabbb' + 'bbbbb' + 'bbbbb' + 'bbbbo';
-      var expected = [WEIGHT_NEAR_VOWEL, WEIGHT_NEAR_VOWEL, 0, 0, 0,
-                      WEIGHT_NEAR_VOWEL + WEIGHT_VOWEL, WEIGHT_VOWEL + WEIGHT_NEAR_VOWEL, WEIGHT_NEAR_VOWEL, 0, 0,
-                      WEIGHT_NEAR_VOWEL, WEIGHT_NEAR_VOWEL, 0, 0, 0,
-                      0, 0, 0, 0, WEIGHT_NEAR_VOWEL,
-                      0, 0, 0, WEIGHT_NEAR_VOWEL,WEIGHT_VOWEL];
+      var expected = [DEF.WEIGHT_NEAR_VOWEL, DEF.WEIGHT_NEAR_VOWEL, 0, 0, 0,
+                      DEF.WEIGHT_NEAR_VOWEL + DEF.WEIGHT_VOWEL, DEF.WEIGHT_VOWEL + DEF.WEIGHT_NEAR_VOWEL, DEF.WEIGHT_NEAR_VOWEL, 0, 0,
+                      DEF.WEIGHT_NEAR_VOWEL, DEF.WEIGHT_NEAR_VOWEL, 0, 0, 0,
+                      0, 0, 0, 0, DEF.WEIGHT_NEAR_VOWEL,
+                      0, 0, 0, DEF.WEIGHT_NEAR_VOWEL,DEF.WEIGHT_VOWEL];
       var weight = ai.weightBoard(board);
-      expected = ai.arrayAdd(expected, WEIGHT_BORDER);
+      expected = ai.arrayAdd(expected, DEF.WEIGHT_BORDER);
       weight.should.eql(expected);
     });
   });
@@ -173,9 +187,61 @@ describe('Basic AI Operations', function() {
         }
       }
 
-      var expectedBest = WEIGHT_BORDER[19] + WEIGHT_BORDER[23] + WEIGHT_BORDER[24] + WEIGHT_VOWEL + WEIGHT_NEAR_VOWEL * 2;
-      expectedBest.should.eql(bestWeight);
+      var expectedBest = DEF.WEIGHT_BORDER[19] + DEF.WEIGHT_BORDER[23] + DEF.WEIGHT_BORDER[24]
+                       + DEF.WEIGHT_VOWEL + DEF.WEIGHT_NEAR_VOWEL * 2;
+      bestWeight.should.eql(expectedBest);
     });
   });
-})
+});
 
+describe('Board Operations', function() {
+  describe('#applyMove()', function() {
+    it('should eql', function() {
+      var board = [-2,-1,0,0,0,
+                   -1,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0];
+
+      var  word = [1,1,1,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0];
+
+      var result = ai.applyMove(board, word);
+
+      var expected = [-1,1,1,0,0,
+                      -1,0,0,0,0,
+                      0,0,0,0,0,
+                      0,0,0,0,0,
+                      0,0,0,0,0];
+
+      result.should.eql(expected);
+    });
+
+    it('should eql 2', function() {
+      var board = [-1,-1,0,0,0,
+                   -1,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,1];
+
+      var  word = [1,1,1,0,0,
+                   1,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0,
+                   0,0,0,0,0];
+
+      var result = ai.applyMove(board, word);
+
+      var expected = [2,1,1,0,0,
+                      1,0,0,0,0,
+                      0,0,0,0,0,
+                      0,0,0,0,0,
+                      0,0,0,0,1];
+
+      result.should.eql(expected);
+    });
+  });
+});
