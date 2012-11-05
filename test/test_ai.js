@@ -1,3 +1,11 @@
+var WEIGHT_VOWEL = 5;
+var WEIGHT_NEAR_VOWEL = 5;
+var WEIGHT_BORDER = [3,2,1,2,3,
+                     2,2,0,2,2,
+                     1,0,0,0,1,
+                     2,2,0,2,2,
+                     3,2,1,2,3];
+
 var should = require("should")
   , ai = require("../lib/ai")
 
@@ -33,6 +41,14 @@ describe('Array Operations', function() {
       a3.should.eql([16,2,-3]);
     })
   });
+
+  describe('#arrayExpand()', function() {
+    it('should eql', function() {
+      var a1 = [1,2];
+      var a2 = ai.arrayExpand(a1);
+      [0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].should.eql(a2);
+    })
+  });
 })
 
 describe('Basic AI Operations', function() {
@@ -43,7 +59,7 @@ describe('Basic AI Operations', function() {
 
       var boardPos = new Array(25);
       boardPos[0] = [0,1,2,3];
-      boardPos[2] = 4;
+      boardPos[2] = [4];
 
       result.should.eql(boardPos);
     })
@@ -51,19 +67,13 @@ describe('Basic AI Operations', function() {
 
   describe('#wordPosition()', function() {
     it('check result', function() {
-      var board = "aaaacc"
+      var board = "aac"
       var result = ai.boardPosition(board);
       var wordPos = ai.wordPosition("ac", result);
 
       var expectedResult = [];
-      expectedResult.push([1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-      expectedResult.push([1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-      expectedResult.push([0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-      expectedResult.push([0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-      expectedResult.push([0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-      expectedResult.push([0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-      expectedResult.push([0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-      expectedResult.push([0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+      expectedResult.push([0,2]);
+      expectedResult.push([1,2]);
 
       wordPos.should.eql(expectedResult);
     });
@@ -86,13 +96,86 @@ describe('Basic AI Operations', function() {
       wordPos = ai.wordPosition(word, boardPos);
       wordPos.length.should.eql(8);
     })
+
+    it('real world example', function() {
+      var board = "bedrmnkcyaejdrxyxuntcalkr";
+      var word = "xray";
+      var boardPos;
+      var wordPos;
+
+      boardPos = ai.boardPosition(board);
+      wordPos = ai.wordPosition(word, boardPos);
+      wordPos.length.should.eql(24);
+    })
   });
 
-  describe('#boardWeight()', function() {
-    it('check result', function() {
-      var board='xxiroarpiiuggozpdchzrazgj';
+  describe('#weightBoard()', function() {
+
+    it('one vowel in the middle', function() {
+      var board='bbbbb' + 'babbb' + 'bbbbb' + 'bbbbb' + 'bbbbb';
+      var expected = [0,WEIGHT_NEAR_VOWEL,0,0,0,
+                      WEIGHT_NEAR_VOWEL,WEIGHT_VOWEL,WEIGHT_NEAR_VOWEL,0,0,
+                      0,WEIGHT_NEAR_VOWEL,0,0,0,
+                      0,0,0,0,0,
+                      0,0,0,0,0];
+      var weight = ai.weightBoard(board);
+      expected = ai.arrayAdd(expected, WEIGHT_BORDER);
+      weight.should.eql(expected);
+    });
+
+    it('one vowel on border', function() {
+      var board='bbbbb' + 'abbbb' + 'bbbbb' + 'bbbbb' + 'bbbbb';
+      var expected = [WEIGHT_NEAR_VOWEL,0,0,0,0,
+                      WEIGHT_VOWEL,WEIGHT_NEAR_VOWEL,0,0,0,
+                      WEIGHT_NEAR_VOWEL,0,0,0,0,
+                      0,0,0,0,0,
+                      0,0,0,0,0];
+      var weight = ai.weightBoard(board);
+      expected = ai.arrayAdd(expected, WEIGHT_BORDER);
+      weight.should.eql(expected);
+    });
+
+    it('3 vowels', function() {
+      var board='bbbbb' + 'aabbb' + 'bbbbb' + 'bbbbb' + 'bbbbo';
+      var expected = [WEIGHT_NEAR_VOWEL, WEIGHT_NEAR_VOWEL, 0, 0, 0,
+                      WEIGHT_NEAR_VOWEL + WEIGHT_VOWEL, WEIGHT_VOWEL + WEIGHT_NEAR_VOWEL, WEIGHT_NEAR_VOWEL, 0, 0,
+                      WEIGHT_NEAR_VOWEL, WEIGHT_NEAR_VOWEL, 0, 0, 0,
+                      0, 0, 0, 0, WEIGHT_NEAR_VOWEL,
+                      0, 0, 0, WEIGHT_NEAR_VOWEL,WEIGHT_VOWEL];
+      var weight = ai.weightBoard(board);
+      expected = ai.arrayAdd(expected, WEIGHT_BORDER);
+      weight.should.eql(expected);
     });
   });
 
+  describe('#weightWord()', function() {
+    it('check ordering', function() {
+      var board = 'adcxb' + 'xxxxx' + 'xxxxx' + 'xxxxb' + 'bbbbo';
+      var words = ['bob', 'adb'];
+      var weight = ai.weightBoard(board);
+      var boardPos = ai.boardPosition(board);
+
+      var bestWeight = 0;
+      var bestPosition;
+      var bestWord;
+      for (var i = 0; i < words.length; i++) {
+        var wordPos = ai.wordPosition(words[i], boardPos);
+        for (var j = 0; j < wordPos.length; j++) {
+          var expanedPos = ai.arrayExpand(wordPos[j]);
+          var posWeight = ai.arrayMul(expanedPos, weight);
+
+          posWeight = ai.arraySum(posWeight);
+          if (posWeight > bestWeight) {
+            bestWeight = posWeight;
+            bestWord = words[i];
+            bestPosition = wordPos[j];
+          }
+        }
+      }
+
+      var expectedBest = WEIGHT_BORDER[19] + WEIGHT_BORDER[23] + WEIGHT_BORDER[24] + WEIGHT_VOWEL + WEIGHT_NEAR_VOWEL * 2;
+      expectedBest.should.eql(bestWeight);
+    });
+  });
 })
 
