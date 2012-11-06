@@ -122,36 +122,5 @@ describe('Basic Logic Operations', function() {
       weight.should.eql(expected);
     });
   });
-
-  describe('#weightWord()', function() {
-    it('check ordering', function() {
-      var board = 'adcxb' + 'xxxxx' + 'xxxxx' + 'xxxxb' + 'bbbbo';
-      var words = ['bob', 'adb'];
-      var weight = ai.weightBoard(board);
-      var boardPos = ai.boardPosition(board);
-
-      var bestWeight = 0;
-      var bestPosition;
-      var bestWord;
-      for (var i = 0; i < words.length; i++) {
-        var wordPos = ai.wordPosition(words[i], boardPos);
-        for (var j = 0; j < wordPos.length; j++) {
-          var expanedPos = wordPos[j].expand();
-          var posWeight = expanedPos.multiply(weight);
-
-          posWeight = posWeight.sum();
-          if (posWeight > bestWeight) {
-            bestWeight = posWeight;
-            bestWord = words[i];
-            bestPosition = wordPos[j];
-          }
-        }
-      }
-
-      var expectedBest = DEF.WEIGHT_BORDER[19] + DEF.WEIGHT_BORDER[23] + DEF.WEIGHT_BORDER[24]
-                       + DEF.WEIGHT_VOWEL + DEF.WEIGHT_NEAR_VOWEL * 2;
-      bestWeight.should.eql(expectedBest);
-    });
-  });
 });
 
