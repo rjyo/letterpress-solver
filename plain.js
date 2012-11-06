@@ -19,7 +19,7 @@ rl.on('line', function(line) {
   var op = line.substr(0,1);
   if (op === '/') {
     line = line.substring(1);
-    var filtered = lp.filterResults(line, results);
+    var filtered = lp.filterResults(line, usableWords);
     lp.printResults(filtered);
 
     console.log('--------------------');
@@ -63,25 +63,25 @@ rl.on('line', function(line) {
   } else if (line.length == 25) {
     var startTime = new Date();
 
-    results = lp.solveBoard(line, wordList);
-    results = results.sort(function(a, b) {
+    usableWords = lp.solveBoard(line, wordList);
+    usableWords = usableWords.sort(function(a, b) {
       return b[0].length - a[0].length;
     });
 
     var time = (new Date() - startTime) / 1000;
     startTime = new Date();
 
-    lp.printResults(results);
+    lp.printResults(usableWords);
 
     console.log('--------------------');
-    console.log('Found ' + results.length + ' results, time spent: ' + time + 's');
+    console.log('Found ' + usableWords.length + ' results, time spent: ' + time + 's');
 
     var time = (new Date() - startTime) / 1000;
     startTime = new Date();
 
     var words = [];
-    for (var i = 0; i < results.length; i++) {
-      var word = results[i][0];
+    for (var i = 0; i < usableWords.length; i++) {
+      var word = usableWords[i][0];
       if (word.length > 10 || word.length < 5) continue;
       words.push(word);
     }
