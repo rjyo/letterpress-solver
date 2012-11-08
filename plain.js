@@ -70,11 +70,11 @@ rl.on('line', function(line) {
       console.log(board.bestMove[1]);
       console.log('--------------------');
       console.log('Found best move at step ' + board.bestMoveIndex + '(' + parseInt(board.bestMoveIndex / board.words.length * 100) + '%), time spent: ' + time + 's');
-      if (op === '2') {
-        board.board = board.board.multiply([-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]);
-      }
-      console.log(board.boardWithColor());
     }
+    if (op === '2') {
+      board.board = board.board.multiply([-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]);
+    }
+    console.log(board.boardWithColor());
   } else if (line.length == 25) {
     var startTime = new Date();
 
