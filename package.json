@@ -3,12 +3,17 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node plain.js",
+    "test": "node_modules/mocha/bin/mocha"
   },
   "dependencies": {
     "underscore": "*",
     "hiredis": "*",
     "redis": "*",
-    "should": "*"
+    "cli-color": "*"
+  },
+  "devDependencies": {
+    "should": "*",
+    "mocha": "*"
   }
 }
