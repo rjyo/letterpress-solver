@@ -1,8 +1,7 @@
-var _ = require('underscore')
-  , fs = require('fs')
+var fs = require('fs')
   , readline = require('readline')
-  , rl = readline.createInterface(process.stdin, process.stdout)
   , DEF = require('./lib/define')
+  , rl = readline.createInterface(process.stdin, process.stdout)
   , lp = require('./lib')
   , ai = require('./lib/ai')
 
@@ -25,19 +24,22 @@ rl.on('line', function(line) {
     console.log('--------------------');
     console.log('Filtered ' + filtered.length + ' results');
   } else if (op === '=') {
+    console.log('Board status')
     console.log('--------------------');
     console.log(board.boardWithColor());
-  } else if (op === '+' || op === '-') {
-    var ourMove = true;
-    if (op === '-') ourMove = false;
-
-    line = line.substring(1);
+  } else if (op === '[') {
     var move = eval(line);
     if (typeof move == 'object') {
-      board.applyMove(move, ourMove);
+      board.applyMove(move, false);
       console.log('Board status updated like below:');
       console.log('--------------------');
       console.log(board.boardWithColor());
+      var val = board.evaluate();
+      if (val == DEF.MINUS_INFINITE) {
+        ai.printSummary(false);
+      } else if (val == DEF.PLUS_INFINITE) {
+        ai.printSummary(true);
+      }
     }
   } else if (op === '<') {
     line = line.substring(1);
@@ -47,20 +49,31 @@ rl.on('line', function(line) {
       console.log('Board status updated like below:');
       console.log(board.board);
     }
-  } else if (op === '?') {
+  } else if (op === '1' || op === '2') {
+    if (op === '2') {
+      board.board = board.board.multiply([-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]);
+    }
+
     var startTime = new Date();
-    board.processed = 0;
-    var val = board.alphaBetaMax(DEF.MINUS_INFINITE, DEF.PLUS_INFINITE, 2);
+    var val = board.solve();
     var endTime = new Date();
     var time = (endTime - startTime) / 1000;
 
     if (val == DEF.MINUS_INFINITE) {
-      console.log('Shit! m(_ _)m');
+      ai.printSummary(false);
     } else {
+      if (val == DEF.PLUS_INFINITE) {
+        ai.printSummary(true);
+      }
+      board.applyMove(board.bestMove[1], true);
       console.log('Best Move: ' + board.bestMove[2]);
       console.log(board.bestMove[1]);
       console.log('--------------------');
-      console.log('Found best move at step ' + board.processed + '(' + parseInt(board.processed / board.words.length * 100) + '%), time spent: ' + time + 's');
+      console.log('Found best move at step ' + board.bestMoveIndex + '(' + parseInt(board.bestMoveIndex / board.words.length * 100) + '%), time spent: ' + time + 's');
+      if (op === '2') {
+        board.board = board.board.multiply([-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]);
+      }
+      console.log(board.boardWithColor());
     }
   } else if (line.length == 25) {
     var startTime = new Date();
@@ -73,7 +86,7 @@ rl.on('line', function(line) {
     var time = (new Date() - startTime) / 1000;
     startTime = new Date();
 
-    lp.printResults(usableWords);
+    // lp.printResults(usableWords);
 
     console.log('--------------------');
     console.log('Found ' + usableWords.length + ' results, time spent: ' + time + 's');
@@ -84,7 +97,6 @@ rl.on('line', function(line) {
     var words = [];
     for (var i = 0; i < usableWords.length; i++) {
       var word = usableWords[i][0];
-      if (word.length > 10 || word.length < 5) continue;
       words.push(word);
     }
     board = new ai.Board(line, words);

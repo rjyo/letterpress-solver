@@ -93,6 +93,10 @@ describe('Basic Logic Operations', function() {
   });
 
   describe('#weightBoard()', function() {
+    var empty = [];
+    for (var i = 0; i < 25; i++) {
+      empty[i] = DEF.WEIGHT_EMPTY;
+    }
 
     it('one vowel in the middle', function() {
       var board='bbbbb' + 'babbb' + 'bbbbb' + 'bbbbb' + 'bbbbb';
@@ -101,8 +105,10 @@ describe('Basic Logic Operations', function() {
                       0,DEF.WEIGHT_NEAR_VOWEL,0,0,0,
                       0,0,0,0,0,
                       0,0,0,0,0];
-      var weight = ai.weightBoard(board);
+      var status = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      var weight = ai.weightBoard(board, status);
       expected = expected.add(DEF.WEIGHT_BORDER);
+      expected = expected.add(empty);
       weight.should.eql(expected);
     });
 
@@ -113,20 +119,25 @@ describe('Basic Logic Operations', function() {
                       DEF.WEIGHT_NEAR_VOWEL,0,0,0,0,
                       0,0,0,0,0,
                       0,0,0,0,0];
-      var weight = ai.weightBoard(board);
+      var status = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      var weight = ai.weightBoard(board, status);
       expected = expected.add(DEF.WEIGHT_BORDER);
+      expected = expected.add(empty);
       weight.should.eql(expected);
     });
 
     it('3 vowels', function() {
-      var board='bbbbb' + 'aabbb' + 'bbbbb' + 'bbbbb' + 'bbbbo';
-      var expected = [DEF.WEIGHT_NEAR_VOWEL, DEF.WEIGHT_NEAR_VOWEL, 0, 0, 0,
-                      DEF.WEIGHT_NEAR_VOWEL + DEF.WEIGHT_VOWEL, DEF.WEIGHT_VOWEL + DEF.WEIGHT_NEAR_VOWEL, DEF.WEIGHT_NEAR_VOWEL, 0, 0,
-                      DEF.WEIGHT_NEAR_VOWEL, DEF.WEIGHT_NEAR_VOWEL, 0, 0, 0,
-                      0, 0, 0, 0, DEF.WEIGHT_NEAR_VOWEL,
-                      0, 0, 0, DEF.WEIGHT_NEAR_VOWEL,DEF.WEIGHT_VOWEL];
-      var weight = ai.weightBoard(board);
+      var board='bbbbb' + 'bbbbb' + 'bbbbb' + 'bbbbb' + 'bbbbb';
+      var status = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      var expected = [0, DEF.WEIGHT_NEAR_BLUE / 2, 0, 0, 0,
+                      DEF.WEIGHT_NEAR_BLUE / 2, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0];
+      var weight = ai.weightBoard(board, status);
       expected = expected.add(DEF.WEIGHT_BORDER);
+      empty[0] = 0; // because status[0] == 1
+      expected = expected.add(empty);
       weight.should.eql(expected);
     });
   });

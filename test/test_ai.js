@@ -99,7 +99,10 @@ describe('Board Object', function() {
       var board = 'adcxb' + 'xxxxx' + 'xxxxx' + 'xxxxb' + 'bbbbo';
       var words = ['adc', 'bob'];
       var board = new ai.Board(board, words);
-      board.posToWord(board.words[0][1]).should.eql('bob');
+      board.posToWord(board.words[0][1]).should.eql('adc');
+
+      var moves = board.orderedMoves();
+      board.posToWord(moves[0][1]).should.eql('bob');
     })
 
     it('check word weight', function() {
@@ -107,13 +110,80 @@ describe('Board Object', function() {
       var words = ['adb', 'bob'];
       var board = new ai.Board(board, words);
 
+      var moves = board.orderedMoves();
       var expectedBest = DEF.WEIGHT_BORDER[19] + DEF.WEIGHT_BORDER[23] + DEF.WEIGHT_BORDER[24]
-                       + DEF.WEIGHT_VOWEL + DEF.WEIGHT_NEAR_VOWEL * 2;
-      board.words[0][0].should.eql(expectedBest);
+                       + DEF.WEIGHT_VOWEL + DEF.WEIGHT_NEAR_VOWEL * 2 + DEF.WEIGHT_EMPTY * 3;
+      moves[0][0].should.eql(expectedBest);
     })
   });
 
-return;
+  describe('#applyMove()', function() {
+    it('apply', function() {
+      var boardStr = 'xxiroarpiiuggozpdchzrazgj';
+      var words = ['radiographic'];
+      var move = [ 3, 5, 16, 8, 4, 11, 20, 21, 15, 18, 9, 17 ];
+
+      var board = new ai.Board(boardStr, words);
+      board.applyMove(move, true);
+
+      board.usedWords.length.should.eql(1);
+      board.usedWords[0].should.eql(words[0]);
+    })
+  });
+
+  describe('#solve()', function() {
+    it('check solve', function() {
+      var boardStr = 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxbbo';
+      var words = ['xob', 'bob'];
+      var board = new ai.Board(boardStr, words);
+      board.board = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0];
+
+      var val = board.solve();
+      board.bestMove[2].should.eql('bob');
+      val.should.eql(DEF.PLUS_INFINITE);
+    })
+
+    it('isMoveSafe', function() {
+      var boardStr = 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxxxx' + 'abcde';
+      var words = ['abcde'];
+      var board = new ai.Board(boardStr, words);
+      board.board = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0];
+      var copy = board.board.slice(0);
+
+      var val = board.isMoveSafe();
+      val.should.eql(false);
+      copy.should.eql(board.board);
+    })
+
+    it('win', function() {
+      var boardStr = 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxxxx' + 'abcde';
+      var words = ['abc', 'de'];
+      var board = new ai.Board(boardStr, words);
+      board.board = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1];
+
+      var val = board.solve();
+      val.should.eql(DEF.PLUS_INFINITE);
+    })
+
+    it('lose', function() {
+      var boardStr = 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxxxx' + 'abcde';
+      var words = ['abc', 'de'];
+      var board = new ai.Board(boardStr, words);
+      board.board = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0];
+
+      var val = board.solve();
+      val.should.eql(DEF.MINUS_INFINITE);
+    })
+
+    it('check better choice', function() {
+      var boardStr = 'adcex' + 'xxxxx' + 'xxxxx' + 'xxxxb' + 'xxxbo';
+      var words = ['adce', 'bob'];
+      var board = new ai.Board(boardStr, words);
+
+      var val = board.solve();
+      board.bestMove[2].should.eql('bob');
+    })
+  });
 
   describe('#alphaBeta()', function() {
     it('check init', function() {
@@ -136,7 +206,7 @@ return;
       val.should.eql(DEF.PLUS_INFINITE);
     })
 
-    it('check ending', function() {
+    it('check ending 2', function() {
       var boardStr = 'adcxx' + 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxbbo';
       var words = ['adc', 'bob'];
       var board = new ai.Board(boardStr, words);

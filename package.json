@@ -7,7 +7,6 @@
     "test": "node_modules/mocha/bin/mocha"
   },
   "dependencies": {
-    "underscore": "*",
     "hiredis": "*",
     "redis": "*",
     "cli-color": "*"
