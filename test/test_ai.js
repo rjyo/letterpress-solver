@@ -10,13 +10,9 @@ describe('Board Operations', function() {
                    0,0,0,0,0,
                    0,0,0,0,0,
                    0,0,0,0,0];
-      var  word = [1,1,1,0,0,
-                   0,0,0,0,0,
-                   0,0,0,0,0,
-                   0,0,0,0,0,
-                   0,0,0,0,0];
+      var  word = [0,1,2];
 
-      var result = ai.applyMove(board, word);
+      var result = ai.applyMove(board, word, true);
       var expected = [-1,1,1,0,0,
                       -1,0,0,0,0,
                       0,0,0,0,0,
@@ -31,13 +27,9 @@ describe('Board Operations', function() {
                    0,0,0,0,0,
                    0,0,0,0,0,
                    0,0,0,0,1];
-      var  word = [1,1,1,0,0,
-                   1,0,0,0,0,
-                   0,0,0,0,0,
-                   0,0,0,0,0,
-                   0,0,0,0,0];
+      var  word = [0,1,2,5];
 
-      var result = ai.applyMove(board, word);
+      var result = ai.applyMove(board, word, true);
       var expected = [2,1,1,0,0,
                       1,0,0,0,0,
                       0,0,0,0,0,
@@ -52,13 +44,9 @@ describe('Board Operations', function() {
                    0,0,0,0,0,
                    0,0,0,0,0,
                    0,0,0,0,1];
-      var  word = [-1,-1,-1,0,0,
-                   0,-1,0,0,0,
-                   0,0,0,0,0,
-                   0,0,0,0,0,
-                   0,0,0,0,0];
+      var  word = [0,1,2,6];
 
-      var result = ai.applyMove(board, word);
+      var result = ai.applyMove(board, word, false);
       var expected = [-2,-2,-1,0,0,
                       -1,-1,0,0,0,
                       0,0,0,0,0,
@@ -100,11 +88,18 @@ describe('Board Object', function() {
       board.words.length.should.eql(24);
     })
 
+    it('check print', function() {
+      var board = "bedrmnkcyaejdrxyxuntcalkr";
+      var words = ["xray"];
+      var board = new ai.Board(board, words);
+      board.boardWithColor().should.be.ok;
+    })
+
     it('check order', function() {
       var board = 'adcxb' + 'xxxxx' + 'xxxxx' + 'xxxxb' + 'bbbbo';
       var words = ['adc', 'bob'];
       var board = new ai.Board(board, words);
-      board.words[0][2].should.eql('bob');
+      board.posToWord(board.words[0][1]).should.eql('bob');
     })
 
     it('check word weight', function() {
@@ -118,14 +113,47 @@ describe('Board Object', function() {
     })
   });
 
+return;
+
   describe('#alphaBeta()', function() {
     it('check init', function() {
       var boardStr = 'adcxb' + 'xxxxx' + 'xxxxx' + 'xxxxb' + 'bbbbo';
       var words = ['adb', 'bob'];
       var board = new ai.Board(boardStr, words);
 
-      var val = board.alphaBetaMax(DEF.MINUS_INFINITE, DEF.PLUS_INFINITE, 2);
+      var val = board.alphaBetaMax(DEF.MINUS_INFINITE, DEF.PLUS_INFINITE, 1);
       board.bestMove[2].should.eql('bob');
+    })
+
+    it('check ending', function() {
+      var boardStr = 'adcxb' + 'xxxxx' + 'xxxxx' + 'xxxxb' + 'bbbbo';
+      var words = ['adb', 'bob'];
+      var board = new ai.Board(boardStr, words);
+      board.board = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0];
+
+      var val = board.alphaBetaMax(DEF.MINUS_INFINITE, DEF.PLUS_INFINITE, 1);
+      board.bestMove[2].should.eql('bob');
+      val.should.eql(DEF.PLUS_INFINITE);
+    })
+
+    it('check ending', function() {
+      var boardStr = 'adcxx' + 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxbbo';
+      var words = ['adc', 'bob'];
+      var board = new ai.Board(boardStr, words);
+      board.board = [-1,-1,-1,-1,-1,
+                     -1,-1,-1,-1,-1,
+                     -1,-1,-1,-1,1,
+                     1,1,1,1,1,
+                     1,1,0,0,0];
+
+      var val;
+
+      val = board.alphaBetaMax(DEF.MINUS_INFINITE, DEF.PLUS_INFINITE, 1);
+      board.bestMove[2].should.eql('adc');
+
+      val = board.alphaBetaMax(DEF.MINUS_INFINITE, DEF.PLUS_INFINITE, 2);
+      val.should.eql(DEF.MINUS_INFINITE);
+
     })
   });
 });

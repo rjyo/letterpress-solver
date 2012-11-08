@@ -17,6 +17,14 @@ describe('Basic Logic Operations', function() {
   });
 
   describe('#wordPosition()', function() {
+    it('should eql', function() {
+      var board = "abcdef"
+      var word = ai.posToWord(board, [0,3]);
+      word.should.eql('ad');
+    });
+  });
+
+  describe('#wordPosition()', function() {
     it('check result', function() {
       var board = "aac"
       var result = ai.boardPosition(board);

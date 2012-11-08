@@ -25,11 +25,8 @@ rl.on('line', function(line) {
     console.log('--------------------');
     console.log('Filtered ' + filtered.length + ' results');
   } else if (op === '=') {
-    line = line.substring(1);
-    var results = ai.wordPosition(line, board.boardPos);
-    for (var i = 0; i < results.length; i++) {
-      results[i].expand().printMatrix();
-    }
+    console.log('--------------------');
+    console.log(board.boardWithColor());
   } else if (op === '+' || op === '-') {
     var ourMove = true;
     if (op === '-') ourMove = false;
@@ -39,7 +36,8 @@ rl.on('line', function(line) {
     if (typeof move == 'object') {
       board.applyMove(move, ourMove);
       console.log('Board status updated like below:');
-      console.log(board.board);
+      console.log('--------------------');
+      console.log(board.boardWithColor());
     }
   } else if (op === '<') {
     line = line.substring(1);
@@ -52,14 +50,18 @@ rl.on('line', function(line) {
   } else if (op === '?') {
     var startTime = new Date();
     board.processed = 0;
-    var val = board.alphaBetaMax(DEF.MINUS_INFINITE, DEF.PLUS_INFINITE, 1);
+    var val = board.alphaBetaMax(DEF.MINUS_INFINITE, DEF.PLUS_INFINITE, 2);
     var endTime = new Date();
     var time = (endTime - startTime) / 1000;
 
-    console.log('Best Move: ' + board.bestMove[2]);
-    console.log(board.bestMove[1]);
-    console.log('--------------------');
-    console.log('Found best move found at step ' + board.processed + '(' + parseInt(board.processed / board.words.length * 100) + '%), time spent: ' + time + 's');
+    if (val == DEF.MINUS_INFINITE) {
+      console.log('Shit! m(_ _)m');
+    } else {
+      console.log('Best Move: ' + board.bestMove[2]);
+      console.log(board.bestMove[1]);
+      console.log('--------------------');
+      console.log('Found best move at step ' + board.processed + '(' + parseInt(board.processed / board.words.length * 100) + '%), time spent: ' + time + 's');
+    }
   } else if (line.length == 25) {
     var startTime = new Date();
 
