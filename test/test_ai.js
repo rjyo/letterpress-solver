@@ -132,15 +132,28 @@ describe('Board Object', function() {
   });
 
   describe('#solve()', function() {
-    it('check solve', function() {
+    it('bestMove', function() {
       var boardStr = 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxbbo';
       var words = ['xob', 'bob'];
       var board = new ai.Board(boardStr, words);
       board.board = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0];
 
       var val = board.solve();
+      // xob has highter score but bob will win
       board.bestMove[2].should.eql('bob');
       val.should.eql(DEF.PLUS_INFINITE);
+    })
+
+    it('!isMoveSafe', function() {
+      var boardStr = 'xxxxx' + 'xxxxx' + 'xxxxx' + 'xxxxx' + 'abcde';
+      var words = ['abc', 'de'];
+      var board = new ai.Board(boardStr, words);
+      board.board = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      var copy = board.board.slice(0);
+
+      var val = board.isMoveSafe();
+      val.should.eql(true);
+      copy.should.eql(board.board);
     })
 
     it('isMoveSafe', function() {
