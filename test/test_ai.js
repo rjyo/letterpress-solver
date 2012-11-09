@@ -196,6 +196,21 @@ describe('Board Object', function() {
       var val = board.solve();
       board.bestMove[2].should.eql('bob');
     })
+
+    it('read world', function() {
+      var boardStr = 'bxuwhckkvkzjphnozatpunexs';
+      var words = ['ajukenboxs', 'jukebox'];
+      var board = new ai.Board(boardStr, words);
+      board.board = [-1,0,-1,1,1,1,0,-1,-1,-1,2,1,1,-1,-2,1,-1,-1,-2,-2,-1,-2,-2,-2,-2];
+
+      // console.log('')
+      // console.log(board.boardWithColor());
+      // console.log('')
+
+      var val = board.solve();
+      val.should.eql(DEF.MINUS_INFINITE);
+    })
+
   });
 
   describe('#alphaBeta()', function() {
