@@ -16,14 +16,8 @@ rl.prompt();
 rl.on('line', function(line) {
   line = line.trim().toLowerCase();
   var op = line.substr(0,1);
-  if (op === '/') {
-    line = line.substring(1);
-    var filtered = lp.filterResults(line, usableWords);
-    lp.printResults(filtered);
 
-    console.log('--------------------');
-    console.log('Filtered ' + filtered.length + ' results');
-  } else if (op === '=') {
+  if (op === '=') {
     console.log('Board status')
     console.log('--------------------');
     console.log(board.boardWithColor());
@@ -75,6 +69,13 @@ rl.on('line', function(line) {
       board.board = board.board.multiply([-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]);
     }
     console.log(board.boardWithColor());
+  } else if (op === '/') {
+    line = line.substring(1);
+    var filtered = lp.filterResults(line, usableWords);
+    lp.printResults(filtered);
+
+    console.log('--------------------');
+    console.log('Filtered ' + filtered.length + ' results');
   } else if (line.length == 25) {
     var startTime = new Date();
 
@@ -86,10 +87,11 @@ rl.on('line', function(line) {
     var time = (new Date() - startTime) / 1000;
     startTime = new Date();
 
-    // lp.printResults(usableWords);
-
     console.log('--------------------');
     console.log('Found ' + usableWords.length + ' results, time spent: ' + time + 's');
+
+    // remove subsets words
+    usableWords = lp.removeSubsets(usableWords);
 
     var time = (new Date() - startTime) / 1000;
     startTime = new Date();
