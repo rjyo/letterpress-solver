@@ -10,7 +10,8 @@
     "hiredis": "*",
     "underscore": "*",
     "redis": "*",
-    "cli-color": "*"
+    "cli-color": "*",
+    "restler": "*"
   },
   "devDependencies": {
     "should": "*",
