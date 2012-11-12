@@ -1,6 +1,6 @@
-## the Letterpress Game Solver
+## the Letterpress Solver
 
-A CLI tool to solve the [Letterpress](http://www.atebits.com/letterpress/) game by Loren Brichter. This solver used a Redis database to preprocess data and store results. A plain version to solve the board __without__ redis is also included.
+In `plain.js`, all words are read into memory and processed. While `solver.js` used a Redis database to preprocess data and store results and works too.
 
 ## Requirements
 
@@ -10,24 +10,6 @@ A CLI tool to solve the [Letterpress](http://www.atebits.com/letterpress/) game 
 Only tested on MacOSX 10.8 
 
 ## Usage
-	
-### The Redis Version
-
-Install libs with `npm`
-
-	> npm install
-	
-Pre-process the data
-
-	> node import.js
-	
-Solve the board "epcepkxargbdyqarscimutbeo"
-
-	> node solver.js epcepkxargbdyqarscimutbeo
-
-Solve the board "epcepkxargbdyqarscimutbeo" and filter the results with "epc"
-
-	> node solver.js epcepkxargbdyqarscimutbeo	epc
 
 ### The Plain Version
 
@@ -55,3 +37,22 @@ A plain version to solve the board __without__ redis is also included. This is a
 	goo                 
 	--------------------
 	Filtered 21 results
+	
+
+### The Redis Version
+
+Install libs with `npm`
+
+	> npm install
+	
+Pre-process the data
+
+	> node import.js
+	
+Solve the board "epcepkxargbdyqarscimutbeo"
+
+	> node solver.js epcepkxargbdyqarscimutbeo
+
+Solve the board "epcepkxargbdyqarscimutbeo" and filter the results with "epc"
+
+	> node solver.js epcepkxargbdyqarscimutbeo	epc
