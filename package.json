@@ -11,7 +11,8 @@
     "underscore": "*",
     "redis": "*",
     "cli-color": "*",
-    "restler": "*"
+    "lpb-client": "*",
+    "commander": "*"
   },
   "devDependencies": {
     "should": "*",

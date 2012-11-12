@@ -15,7 +15,7 @@ var wordList = lp.importDir('./words')
   , board;
 
 if (program.server && program.player) {
-  var c = require('./lib/console');
+  var c = require('lpb-client');
   c = new c.LPBConsole(program.server, program.player);
 
   function takeMove() {
