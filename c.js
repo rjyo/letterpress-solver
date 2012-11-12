@@ -10,11 +10,11 @@ var DEF = require('./lib/define')
   , lp = require('./lib')
   , ai = require('./lib/ai')
 
-var wordList = lp.importDir('./words')
-  , results = []
-  , board;
-
 if (program.server && program.player) {
+  var wordList = lp.importDir('./words')
+    , results = []
+    , board;
+
   var c = require('lpb-client');
   c = new c.LPBConsole(program.server, program.player);
 
