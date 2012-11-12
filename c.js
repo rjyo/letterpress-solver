@@ -15,6 +15,8 @@ if (program.server && program.player) {
     , results = []
     , board;
 
+  var theirMoveApplied = false;
+
   var c = require('lpb-client');
   c = new c.LPBConsole(program.server, program.player);
 
@@ -78,7 +80,9 @@ if (program.server && program.player) {
     for (var i = 0; i < data.steps.length; i++) {
       var p = data.steps[i][0];
       var m = data.steps[i][1];
-      board.applyMove(m, (p === program.player));
+      var ourMove = (p === program.player);
+      board.applyMove(m, ourMove);
+      theirMoveApplied = !ourMove;
     }
     console.log('\nCurrent board:')
     console.log('----');
@@ -90,11 +94,15 @@ if (program.server && program.player) {
   c.on('ourmove', takeMove);
 
   c.on('theirmove', function(move) {
-    console.log('Their move: ');
-    console.log('[' + move.join(', ') + ']');
-    board.applyMove(move, false);
-    console.log(board.boardWithColor());
-    console.log('----');
+    if (!theirMoveApplied) {
+      console.log('Their move: ');
+      console.log('[' + move.join(', ') + ']');
+
+      board.applyMove(move, false);
+      theirMoveApplied = true;
+      console.log(board.boardWithColor());
+      console.log('----');
+    }
     // takeMove();
     c.emit('ourmove');
   });
