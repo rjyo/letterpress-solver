@@ -1,7 +1,5 @@
-var fs = require('fs')
-  , readline = require('readline')
+var rl = require('readline').createInterface(process.stdin, process.stdout)
   , DEF = require('./lib/define')
-  , rl = readline.createInterface(process.stdin, process.stdout)
   , lp = require('./lib')
   , ai = require('./lib/ai')
 
